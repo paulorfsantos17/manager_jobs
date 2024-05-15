@@ -8,10 +8,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.paulosantos.gestordevagas.modules.company.dto.CreateJobDTO;
 import com.paulosantos.gestordevagas.modules.company.entities.JobEntity;
 import com.paulosantos.gestordevagas.modules.company.useCases.CreateJobUseCase;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/job")
@@ -20,7 +24,16 @@ public class JobController {
   private CreateJobUseCase createJobUseCase;
 
   @PostMapping("/")
-  public ResponseEntity<Object> create(@Valid @RequestBody JobEntity jobEntity) {
+  public ResponseEntity<Object> create(@Valid @RequestBody CreateJobDTO createJobDTO, HttpServletRequest request) {
+    var companyId = request.getAttribute("company_id");
+
+    JobEntity jobEntity  = JobEntity.builder()
+        .description(createJobDTO.getDescription())
+        .benefits(createJobDTO.getBenefits())
+        .level(createJobDTO.getLevel())
+        .companyId(UUID.fromString(companyId.toString()))
+        .build();
+
     try {
       JobEntity Job = this.createJobUseCase.execute(jobEntity);
       return ResponseEntity.status(HttpStatus.CREATED).body(Job);
