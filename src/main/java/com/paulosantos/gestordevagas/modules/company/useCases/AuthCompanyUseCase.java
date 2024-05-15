@@ -26,7 +26,7 @@ public class AuthCompanyUseCase {
   @Autowired
   private PasswordEncoder passwordEncode;
 
-  public void execute(AuthCompanyDTO authCompanyDTO) throws AuthenticationException {
+  public String execute(AuthCompanyDTO authCompanyDTO) throws AuthenticationException {
     CompanyEntity company = this.companyRepository.findByUsername(authCompanyDTO.getUsername())
         .orElseThrow(() -> {
           throw new CompanyNotFoundException();
@@ -42,7 +42,8 @@ public class AuthCompanyUseCase {
     String token = JWT.create().withIssuer("javagas")
         .withSubject(company.getId().toString())
         .sign(algorithm);
+
+    return token;
   }
 
-  return token
 }
