@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.paulosantos.gestordevagas.exceptions.AuthUnauthorizationException;
 import com.paulosantos.gestordevagas.modules.company.dto.AuthCompanyDTO;
 import com.paulosantos.gestordevagas.modules.company.entities.CompanyEntity;
 import com.paulosantos.gestordevagas.modules.company.repositories.CompanyRepository;
@@ -31,7 +32,7 @@ public class AuthCompanyUseCase {
   public String execute(AuthCompanyDTO authCompanyDTO) throws AuthenticationException {
     CompanyEntity company = this.companyRepository.findByUsername(authCompanyDTO.getUsername())
         .orElseThrow(() -> {
-          throw new RuntimeException("Usuário ou username incorreto.");
+          throw new AuthUnauthorizationException();
         });
 
     boolean passwordMatches = this.passwordEncode.matches(authCompanyDTO.getPassword(), company.getPassword());
