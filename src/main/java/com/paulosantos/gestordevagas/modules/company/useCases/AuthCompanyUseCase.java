@@ -13,6 +13,9 @@ import com.paulosantos.gestordevagas.modules.company.dto.AuthCompanyDTO;
 import com.paulosantos.gestordevagas.modules.company.entities.CompanyEntity;
 import com.paulosantos.gestordevagas.modules.company.repositories.CompanyRepository;
 
+import java.time.Instant;
+import java.time.Duration;
+
 @Service
 public class AuthCompanyUseCase {
 
@@ -40,6 +43,7 @@ public class AuthCompanyUseCase {
     Algorithm algorithm = Algorithm.HMAC256(secretKey);
     String token = JWT.create().withIssuer("javagas")
         .withSubject(company.getId().toString())
+        .withExpiresAt(Instant.now().plus(Duration.ofHours(2)))
         .sign(algorithm);
 
     return token;
