@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.paulosantos.gestordevagas.exceptions.AuthUnauthorizationException;
-import com.paulosantos.gestordevagas.modules.company.dto.AuthCompanyDTO;
+import com.paulosantos.gestordevagas.modules.company.dto.AuthCompanyRequestDTO;
 import com.paulosantos.gestordevagas.modules.company.useCases.AuthCompanyUseCase;
 
 import javax.naming.AuthenticationException;
@@ -23,7 +23,7 @@ public class AuthCompanyController {
   private AuthCompanyUseCase authCompanyUseCase;
 
   @PostMapping("/company")
-  public ResponseEntity<Object> create(@RequestBody AuthCompanyDTO authCompanyDTO) throws AuthenticationException {
+  public ResponseEntity<Object> create(@RequestBody AuthCompanyRequestDTO authCompanyDTO) throws AuthenticationException {
     try {
       String token = this.authCompanyUseCase.execute(authCompanyDTO);
 
