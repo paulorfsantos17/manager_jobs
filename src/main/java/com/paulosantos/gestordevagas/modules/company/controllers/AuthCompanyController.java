@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.paulosantos.gestordevagas.exceptions.AuthUnauthorizationException;
 import com.paulosantos.gestordevagas.modules.company.dto.AuthCompanyRequestDTO;
+import com.paulosantos.gestordevagas.modules.company.dto.AuthCompanyResponseDTO;
 import com.paulosantos.gestordevagas.modules.company.useCases.AuthCompanyUseCase;
 
 import javax.naming.AuthenticationException;
@@ -26,7 +27,7 @@ public class AuthCompanyController {
   public ResponseEntity<Object> create(@RequestBody AuthCompanyRequestDTO authCompanyDTO)
       throws AuthenticationException {
     try {
-      String token = this.authCompanyUseCase.execute(authCompanyDTO);
+      AuthCompanyResponseDTO token = this.authCompanyUseCase.execute(authCompanyDTO);
 
       return ResponseEntity.ok(token);
     } catch (AuthUnauthorizationException e) {
