@@ -16,14 +16,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/company")
 public class AuthCompanyController {
 
   @Autowired
   private AuthCompanyUseCase authCompanyUseCase;
 
-  @PostMapping("/company")
-  public ResponseEntity<Object> create(@RequestBody AuthCompanyRequestDTO authCompanyDTO) throws AuthenticationException {
+  @PostMapping("/auth")
+  public ResponseEntity<Object> create(@RequestBody AuthCompanyRequestDTO authCompanyDTO)
+      throws AuthenticationException {
     try {
       String token = this.authCompanyUseCase.execute(authCompanyDTO);
 
