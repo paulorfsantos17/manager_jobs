@@ -5,18 +5,18 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.paulosantos.gestordevagas.providers.JWTProvider;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import java.util.Collections;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
@@ -33,14 +33,20 @@ public class SecurityFilter extends OncePerRequestFilter {
     if (request.getRequestURI().startsWith("/company")) {
 
       if (header != null) {
-        String subjectToken = jwtProvider.validateToken(header);
-        if (subjectToken.isEmpty()) {
+        DecodedJWT token = jwtProvider.validateToken(header);
+        if (token == null) {
           response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token inválido");
           return;
         }
-        request.setAttribute("company_id", subjectToken);
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(subjectToken, null,
-            Collections.emptyList());
+
+        var roles = token.getClaim("roles").asList(Object.class);
+
+        var grant = roles.stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role.toString().toUpperCase()))
+            .toList();
+
+        request.setAttribute("company_id", token.getSubject());
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(token.getSubject(), null,
+            grant);
         SecurityContextHolder.getContext().setAuthentication(auth);
 
       }
