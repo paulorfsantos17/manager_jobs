@@ -22,7 +22,7 @@ import java.util.Arrays;
 @Service
 public class AuthCandidateUseCase {
 
-  @Value("${security.token.secret.cadidate}")
+  @Value("${security.token.secret.candidate}")
   private String secretKey;
 
   @Autowired
@@ -41,8 +41,6 @@ public class AuthCandidateUseCase {
     var passwordMatches = this.passwordEncode.matches(authCandidateRequestDTO.password(),
         candidate.getPassword());
 
-    System.out.println(passwordMatches);
-
     if (!passwordMatches) {
       throw new AuthUnauthorizationException();
     }
@@ -53,7 +51,7 @@ public class AuthCandidateUseCase {
 
     String token = JWT.create().withIssuer("javagas")
         .withSubject(candidate.getId().toString())
-        .withClaim("roles", Arrays.asList("candidate"))
+        .withClaim("roles", Arrays.asList("CANDIDATE"))
         .withExpiresAt(expiresIn)
         .sign(algorithm);
 
