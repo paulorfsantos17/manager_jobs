@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.paulosantos.gestordevagas.exceptions.AuthUnauthorizationException;
-import com.paulosantos.gestordevagas.modules.company.dto.AuthCompanyDTO;
+import com.paulosantos.gestordevagas.modules.company.dto.AuthCompanyRequestDTO;
 import com.paulosantos.gestordevagas.modules.company.entities.CompanyEntity;
 import com.paulosantos.gestordevagas.modules.company.repositories.CompanyRepository;
 
@@ -29,13 +29,13 @@ public class AuthCompanyUseCase {
   @Autowired
   private PasswordEncoder passwordEncode;
 
-  public String execute(AuthCompanyDTO authCompanyDTO) throws AuthenticationException {
-    CompanyEntity company = this.companyRepository.findByUsername(authCompanyDTO.getUsername())
+  public String execute(AuthCompanyRequestDTO authCompanyDTO) throws AuthenticationException {
+    CompanyEntity company = this.companyRepository.findByUsername(authCompanyDTO.username())
         .orElseThrow(() -> {
           throw new AuthUnauthorizationException();
         });
 
-    boolean passwordMatches = this.passwordEncode.matches(authCompanyDTO.getPassword(), company.getPassword());
+    boolean passwordMatches = this.passwordEncode.matches(authCompanyDTO.password(), company.getPassword());
 
     if (!passwordMatches) {
       throw new AuthenticationException();
