@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 
 @SpringBootApplication
 @OpenAPIDefinition(info = @Info(title = "Gestão de vagas", description = "API Responsável pela gestão de vagas.", version = "1"))
-@SecurityScheme(name = "jwt-auth", scheme = "bearer", bearerFormat = "JWT", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
+@SecurityScheme(name = "jwt_auth", scheme = "bearer", bearerFormat = "JWT", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
 public class GestordevagasApplication {
 
 	public static void main(String[] args) {
