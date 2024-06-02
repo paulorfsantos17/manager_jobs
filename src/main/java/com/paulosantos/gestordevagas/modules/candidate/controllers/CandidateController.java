@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.paulosantos.gestordevagas.exceptions.CandidateFoundException;
 import com.paulosantos.gestordevagas.exceptions.UserFoundException;
 import com.paulosantos.gestordevagas.modules.candidate.CandidateEntity;
 import com.paulosantos.gestordevagas.modules.candidate.dto.ProfileCandidateResponseDTO;
@@ -35,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/candidate")
+@Tag(name = "Candidato", description = "Informações do Candidato")
 public class CandidateController {
 
   @Autowired
@@ -46,17 +48,32 @@ public class CandidateController {
   private ListAllJobsByFilterUseCase allJobsByFilterUseCase;
 
   @PostMapping("/")
+  @Operation(summary = "Cadastro do Candidato", description = "Essa funcão é responsavel por inserir um novo candidato.")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", content = {
+          @Content(schema = @Schema(implementation = CandidateEntity.class))
+      }),
+      @ApiResponse(responseCode = "404", description = "Candidato já existe.")
+  })
   public ResponseEntity<Object> createCandidate(@Valid @RequestBody CandidateEntity candidateEntity) {
     try {
       var result = this.createCandidateUseCase.execute(candidateEntity);
       return ResponseEntity.status(HttpStatus.CREATED).body(result);
-    } catch (Exception e) {
+    } catch (CandidateFoundException e) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
   }
 
   @GetMapping("/")
   @PreAuthorize("hasRole('CANDIDATE')")
+  @Operation(summary = "Perfil do Candidato", description = "Essa funcão é responsavel por buscar  as infomações de perfil do candidato")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", content = {
+          @Content(schema = @Schema(implementation = ProfileCandidateResponseDTO.class))
+      }),
+      @ApiResponse(responseCode = "404", description = "Candidato Não existe.")
+  })
+  @SecurityRequirement(name = "jwt_auth")
   public ResponseEntity<Object> getCandidate(HttpServletRequest request) throws UserFoundException {
     var candidateId = request.getAttribute("candidate_id");
 
@@ -72,7 +89,6 @@ public class CandidateController {
 
   @GetMapping("/job")
   @PreAuthorize("hasRole('CANDIDATE')")
-  @Tag(name = "Candidato", description = "Informações do Candidato")
   @Operation(summary = "Listagem de vagas disponível para o candidato", description = "Essa funcão é responsavel por listar todas as vagas disponíveis, baseada no filtro")
   @ApiResponses({
       @ApiResponse(responseCode = "200", content = {

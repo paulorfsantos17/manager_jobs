@@ -18,6 +18,8 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 @Entity(name = "job")
 @Data
 @Builder
@@ -28,10 +30,13 @@ public class JobEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
+  @Schema(example = "Vaga para Desing")
   private String description;
+  @Schema(example = "Plano de sáude,GymPass")
   private String benefits;
 
   @NotBlank(message = "Campo [nível] é obrigatório. ")
+  @Schema(example = "SENIOR")
   private String level;
 
   @ManyToOne()
