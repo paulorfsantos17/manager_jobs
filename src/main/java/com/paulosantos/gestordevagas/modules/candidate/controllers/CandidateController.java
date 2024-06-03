@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.paulosantos.gestordevagas.exceptions.CandidateFoundException;
 import com.paulosantos.gestordevagas.exceptions.UserFoundException;
-import com.paulosantos.gestordevagas.modules.candidate.CandidateEntity;
 import com.paulosantos.gestordevagas.modules.candidate.dto.ProfileCandidateResponseDTO;
+import com.paulosantos.gestordevagas.modules.candidate.entity.CandidateEntity;
 import com.paulosantos.gestordevagas.modules.candidate.useCases.CreateCandidateUseCase;
 import com.paulosantos.gestordevagas.modules.candidate.useCases.ListAllJobsByFilterUseCase;
 import com.paulosantos.gestordevagas.modules.candidate.useCases.ProfileCandidateUseCase;

@@ -1,4 +1,4 @@
-package com.paulosantos.gestordevagas.modules.candidate;
+package com.paulosantos.gestordevagas.modules.candidate.entity;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

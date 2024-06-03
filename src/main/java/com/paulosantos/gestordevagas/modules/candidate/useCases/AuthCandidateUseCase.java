@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.paulosantos.gestordevagas.exceptions.AuthUnauthorizationException;
-import com.paulosantos.gestordevagas.modules.candidate.CandidateEntity;
-import com.paulosantos.gestordevagas.modules.candidate.CandidateRepository;
+import com.paulosantos.gestordevagas.modules.candidate.Repositories.CandidateRepository;
 import com.paulosantos.gestordevagas.modules.candidate.dto.AuthCandidateRequestDTO;
 import com.paulosantos.gestordevagas.modules.candidate.dto.AuthCandidateResponseDTO;
+import com.paulosantos.gestordevagas.modules.candidate.entity.CandidateEntity;
 
 import java.time.Instant;
 import java.time.Duration;

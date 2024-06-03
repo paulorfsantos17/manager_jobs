@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.paulosantos.gestordevagas.exceptions.UserFoundException;
-import com.paulosantos.gestordevagas.modules.candidate.CandidateEntity;
-import com.paulosantos.gestordevagas.modules.candidate.CandidateRepository;
+import com.paulosantos.gestordevagas.modules.candidate.Repositories.CandidateRepository;
 import com.paulosantos.gestordevagas.modules.candidate.dto.ProfileCandidateResponseDTO;
+import com.paulosantos.gestordevagas.modules.candidate.entity.CandidateEntity;
 
 @Service
 public class ProfileCandidateUseCase {
