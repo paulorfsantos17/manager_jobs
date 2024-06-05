@@ -30,8 +30,10 @@ public class JobEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
+
   @Schema(example = "Vaga para Desing")
   private String description;
+  
   @Schema(example = "Plano de sáude,GymPass")
   private String benefits;
 
