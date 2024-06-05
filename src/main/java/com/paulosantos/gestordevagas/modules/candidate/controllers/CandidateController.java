@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.paulosantos.gestordevagas.exceptions.CandidateFoundException;
 import com.paulosantos.gestordevagas.exceptions.UserFoundException;
 import com.paulosantos.gestordevagas.modules.candidate.dto.ProfileCandidateResponseDTO;
+import com.paulosantos.gestordevagas.modules.candidate.entity.ApplyJobEntity;
 import com.paulosantos.gestordevagas.modules.candidate.entity.CandidateEntity;
+import com.paulosantos.gestordevagas.modules.candidate.useCases.ApplyJobCandidateUseCase;
 import com.paulosantos.gestordevagas.modules.candidate.useCases.CreateCandidateUseCase;
 import com.paulosantos.gestordevagas.modules.candidate.useCases.ListAllJobsByFilterUseCase;
 import com.paulosantos.gestordevagas.modules.candidate.useCases.ProfileCandidateUseCase;
@@ -44,8 +46,12 @@ public class CandidateController {
 
   @Autowired
   private ProfileCandidateUseCase profileCandidateUseCase;
+
   @Autowired
   private ListAllJobsByFilterUseCase allJobsByFilterUseCase;
+
+  @Autowired
+  private ApplyJobCandidateUseCase applyJobCandidateUseCase;
 
   @PostMapping("/")
   @Operation(summary = "Cadastro do Candidato", description = "Essa funcão é responsavel por inserir um novo candidato.")
@@ -106,4 +112,19 @@ public class CandidateController {
     }
   }
 
+  @PostMapping("/job/apply")
+  @PreAuthorize("hasRole('CANDIDATE')")
+  @SecurityRequirement(name = "jwt_auth")
+  @Operation(summary = "Inscrição do candidato para uma vaga", description = "Essa funcão é responsavel por realizar a inscrição do candidato a uma vaga.")
+  public ResponseEntity<Object> applyJob(HttpServletRequest request, @RequestBody UUID idJob) {
+    var idCandidate = request.getAttribute(("candidate_id"));
+
+    try {
+      ApplyJobEntity result = this.applyJobCandidateUseCase.execute(idJob, UUID.fromString(idCandidate.toString()));
+
+      return ResponseEntity.status(HttpStatus.CREATED).body(result);
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    }
+  }
 }
