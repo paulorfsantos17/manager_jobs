@@ -1,6 +1,9 @@
 package com.paulosantos.gestordevagas.modules.company.entities;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -18,6 +21,9 @@ import jakarta.validation.constraints.Pattern;
 
 @Data
 @Entity(name = "company")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class CompanyEntity {
 
   @Id
