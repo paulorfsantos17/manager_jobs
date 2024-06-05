@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.paulosantos.gestordevagas.exceptions.CompanyNotFoundException;
 import com.paulosantos.gestordevagas.modules.company.dto.CreateJobDTO;
 import com.paulosantos.gestordevagas.modules.company.entities.JobEntity;
 import com.paulosantos.gestordevagas.modules.company.useCases.CreateJobUseCase;
@@ -54,8 +55,8 @@ public class JobController {
     try {
       JobEntity Job = this.createJobUseCase.execute(jobEntity);
       return ResponseEntity.status(HttpStatus.CREATED).body(Job);
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+    } catch (CompanyNotFoundException e) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
   }
 }
