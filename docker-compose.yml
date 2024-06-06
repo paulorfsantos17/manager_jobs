@@ -1,5 +1,14 @@
 version: '3.8'
 
+networks:
+  gv-networtk:
+    driver: bridge
+
+volumes:
+  phometheus_data:
+  grafana_data:
+
+
 services:
   postgres:
     container_name: gestao_vagas_postgres
@@ -10,3 +19,20 @@ services:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin
       - POSTGRES_DB=gestao_vagas
+  prometheus:
+    container_name: prometheus-gestao-vagas
+    image: prom/prometheus:latest
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - phometheus_data:/prometheus
+    networks:
+      - gv-networtk
+    ports:
+      - 9090:9090
+  grafana:
+    container_name: grafana-gestao-vagas
+    image: grafana/grafana:latest
+    ports:
+      - 3000:3000
+    networks:
+      - gv-networtk
